@@ -12,7 +12,7 @@ describe('createSession', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(nanoid)
-      .mockReturnValueOnce('sess1234')        // sessionId  (8 chars)
+      .mockReturnValueOnce('sess1234') // sessionId  (8 chars)
       .mockReturnValueOnce('localid1234567890') // localId (16 chars)
   })
 
@@ -26,7 +26,11 @@ describe('createSession', () => {
       .mockReturnValueOnce(sessionBuilder as never)
       .mockReturnValueOnce(participantBuilder as never)
 
-    await createSession({ name: 'BBQ', creatorName: 'Alice', month: '2026-04-01' })
+    await createSession({
+      name: 'BBQ',
+      creatorName: 'Alice',
+      month: '2026-04-01',
+    })
 
     expect(sessionBuilder.insert).toHaveBeenCalledWith({
       id: 'sess1234',
@@ -45,7 +49,11 @@ describe('createSession', () => {
       .mockReturnValueOnce(sessionBuilder as never)
       .mockReturnValueOnce(participantBuilder as never)
 
-    await createSession({ name: 'BBQ', creatorName: 'Alice', month: '2026-04-01' })
+    await createSession({
+      name: 'BBQ',
+      creatorName: 'Alice',
+      month: '2026-04-01',
+    })
 
     expect(participantBuilder.insert).toHaveBeenCalledWith({
       session_id: 'sess1234',
@@ -64,7 +72,11 @@ describe('createSession', () => {
       .mockReturnValueOnce(sessionBuilder as never)
       .mockReturnValueOnce(participantBuilder as never)
 
-    await createSession({ name: 'BBQ', creatorName: 'Alice', month: '2026-04-01' })
+    await createSession({
+      name: 'BBQ',
+      creatorName: 'Alice',
+      month: '2026-04-01',
+    })
 
     expect(localStorage.getItem('local_id:sess1234')).toBe('localid1234567890')
     expect(localStorage.getItem('participant_id:sess1234')).toBe('part-uuid')
@@ -80,12 +92,19 @@ describe('createSession', () => {
       .mockReturnValueOnce(sessionBuilder as never)
       .mockReturnValueOnce(participantBuilder as never)
 
-    const result = await createSession({ name: 'BBQ', creatorName: 'Alice', month: '2026-04-01' })
+    const result = await createSession({
+      name: 'BBQ',
+      creatorName: 'Alice',
+      month: '2026-04-01',
+    })
     expect(result).toBe('sess1234')
   })
 
   it('throws when the session insert errors and does not write localStorage', async () => {
-    const sessionBuilder = createBuilder({ data: null, error: new Error('sessions insert failed') })
+    const sessionBuilder = createBuilder({
+      data: null,
+      error: new Error('sessions insert failed'),
+    })
     vi.mocked(supabase.from).mockReturnValueOnce(sessionBuilder as never)
 
     await expect(
@@ -115,7 +134,10 @@ describe('getSession', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('returns session data on success', async () => {
-    const builder = createBuilder({ data: { id: 'ses1', name: 'BBQ' }, error: null })
+    const builder = createBuilder({
+      data: { id: 'ses1', name: 'BBQ' },
+      error: null,
+    })
     vi.mocked(supabase.from).mockReturnValue(builder as never)
 
     const result = await getSession('ses1')
@@ -123,7 +145,10 @@ describe('getSession', () => {
   })
 
   it('throws when Supabase returns an error', async () => {
-    const builder = createBuilder({ data: null, error: new Error('not found') })
+    const builder = createBuilder({
+      data: null,
+      error: new Error('not found'),
+    })
     vi.mocked(supabase.from).mockReturnValue(builder as never)
 
     await expect(getSession('bad-id')).rejects.toThrow('not found')
@@ -178,7 +203,10 @@ describe('joinSession', () => {
   })
 
   it('inserts participant with session_id, name, and local_id', async () => {
-    const builder = createBuilder({ data: { id: 'new-part', name: 'Bob' }, error: null })
+    const builder = createBuilder({
+      data: { id: 'new-part', name: 'Bob' },
+      error: null,
+    })
     vi.mocked(supabase.from).mockReturnValue(builder as never)
 
     await joinSession('ses1', 'Bob')
@@ -191,7 +219,10 @@ describe('joinSession', () => {
   })
 
   it('stores local_id and participant_id in localStorage', async () => {
-    const builder = createBuilder({ data: { id: 'new-part', name: 'Bob' }, error: null })
+    const builder = createBuilder({
+      data: { id: 'new-part', name: 'Bob' },
+      error: null,
+    })
     vi.mocked(supabase.from).mockReturnValue(builder as never)
 
     await joinSession('ses1', 'Bob')
@@ -201,7 +232,10 @@ describe('joinSession', () => {
   })
 
   it('returns the participant object', async () => {
-    const builder = createBuilder({ data: { id: 'new-part', name: 'Bob' }, error: null })
+    const builder = createBuilder({
+      data: { id: 'new-part', name: 'Bob' },
+      error: null,
+    })
     vi.mocked(supabase.from).mockReturnValue(builder as never)
 
     const result = await joinSession('ses1', 'Bob')
@@ -209,7 +243,10 @@ describe('joinSession', () => {
   })
 
   it('throws on Supabase error and does not write localStorage', async () => {
-    const builder = createBuilder({ data: null, error: new Error('join failed') })
+    const builder = createBuilder({
+      data: null,
+      error: new Error('join failed'),
+    })
     vi.mocked(supabase.from).mockReturnValue(builder as never)
 
     await expect(joinSession('ses1', 'Bob')).rejects.toThrow('join failed')

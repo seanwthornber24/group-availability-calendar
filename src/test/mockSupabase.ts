@@ -36,7 +36,9 @@ interface MockChannel {
  *   `await supabase.from('x').delete().eq('id', val)`
  * work without an explicit terminal call.
  */
-export function createBuilder(defaultResult: MockResult = { data: null, error: null }): MockBuilder {
+export function createBuilder(
+  defaultResult: MockResult = { data: null, error: null }
+): MockBuilder {
   const builder: MockBuilder = {
     select: vi.fn(),
     insert: vi.fn(),
@@ -70,10 +72,14 @@ export function createBuilder(defaultResult: MockResult = { data: null, error: n
 export function createChannelMock(): MockChannel {
   const callbacks: Record<string, (payload: unknown) => void> = {}
   const channel: MockChannel = {
-    on: vi.fn().mockImplementation((_type: string, filter: { event: string }, cb: (payload: unknown) => void) => {
-      callbacks[filter.event] = cb
-      return channel
-    }),
+    on: vi
+      .fn()
+      .mockImplementation(
+        (_type: string, filter: { event: string }, cb: (payload: unknown) => void) => {
+          callbacks[filter.event] = cb
+          return channel
+        }
+      ),
     subscribe: vi.fn().mockReturnThis(),
     /** Simulate a realtime event arriving from Supabase */
     _trigger(event: string, payload: unknown) {

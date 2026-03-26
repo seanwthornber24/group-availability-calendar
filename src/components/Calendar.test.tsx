@@ -33,7 +33,11 @@ vi.mock('./DayCell', () => ({
   ),
 }))
 
-const PARTICIPANTS = [{ id: 'p1', name: 'A', session_id: 's1', local_id: 'l1', created_at: null }, { id: 'p2', name: 'B', session_id: 's1', local_id: 'l2', created_at: null }, { id: 'p3', name: 'C', session_id: 's1', local_id: 'l3', created_at: null }]
+const PARTICIPANTS = [
+  { id: 'p1', name: 'A', session_id: 's1', local_id: 'l1', created_at: null },
+  { id: 'p2', name: 'B', session_id: 's1', local_id: 'l2', created_at: null },
+  { id: 'p3', name: 'C', session_id: 's1', local_id: 'l3', created_at: null },
+]
 
 function renderCalendar(props = {}) {
   const defaults = {
@@ -87,9 +91,9 @@ describe('Calendar', () => {
       { id: 'av2', participant_id: 'p2', date: '2026-04-05' },
     ]
     renderCalendar({ availability })
-    const cell = screen.getAllByTestId('day-cell').find(
-      (c) => c.getAttribute('data-date') === '2026-04-05'
-    )
+    const cell = screen
+      .getAllByTestId('day-cell')
+      .find((c) => c.getAttribute('data-date') === '2026-04-05')
     expect(cell).toHaveAttribute('data-free', '2')
   })
 
@@ -100,9 +104,9 @@ describe('Calendar', () => {
       { id: 'av3', participant_id: 'p3', date: '2026-04-10' },
     ]
     renderCalendar({ availability })
-    const cell = screen.getAllByTestId('day-cell').find(
-      (c) => c.getAttribute('data-date') === '2026-04-10'
-    )
+    const cell = screen
+      .getAllByTestId('day-cell')
+      .find((c) => c.getAttribute('data-date') === '2026-04-10')
     expect(cell).toHaveAttribute('data-free', '3')
   })
 
@@ -113,12 +117,12 @@ describe('Calendar', () => {
     ]
     renderCalendar({ availability, currentParticipantId: 'p1' })
 
-    const myCell = screen.getAllByTestId('day-cell').find(
-      (c) => c.getAttribute('data-date') === '2026-04-07'
-    )
-    const otherCell = screen.getAllByTestId('day-cell').find(
-      (c) => c.getAttribute('data-date') === '2026-04-08'
-    )
+    const myCell = screen
+      .getAllByTestId('day-cell')
+      .find((c) => c.getAttribute('data-date') === '2026-04-07')
+    const otherCell = screen
+      .getAllByTestId('day-cell')
+      .find((c) => c.getAttribute('data-date') === '2026-04-08')
 
     expect(myCell).toHaveAttribute('data-my', 'true')
     expect(otherCell).toHaveAttribute('data-my', 'false')
@@ -132,12 +136,12 @@ describe('Calendar', () => {
     ]
     renderCalendar({ availability })
 
-    const bestCell = screen.getAllByTestId('day-cell').find(
-      (c) => c.getAttribute('data-date') === '2026-04-05'
-    )
-    const normalCell = screen.getAllByTestId('day-cell').find(
-      (c) => c.getAttribute('data-date') === '2026-04-10'
-    )
+    const bestCell = screen
+      .getAllByTestId('day-cell')
+      .find((c) => c.getAttribute('data-date') === '2026-04-05')
+    const normalCell = screen
+      .getAllByTestId('day-cell')
+      .find((c) => c.getAttribute('data-date') === '2026-04-10')
 
     expect(bestCell).toHaveAttribute('data-best', 'true')
     expect(normalCell).toHaveAttribute('data-best', 'false')
@@ -160,9 +164,9 @@ describe('Calendar', () => {
     const user = userEvent.setup()
     renderCalendar({ onDayTap })
 
-    const cell = screen.getAllByTestId('day-cell').find(
-      (c) => c.getAttribute('data-date') === '2026-04-20'
-    )
+    const cell = screen
+      .getAllByTestId('day-cell')
+      .find((c) => c.getAttribute('data-date') === '2026-04-20')
     await user.click(cell!)
     expect(onDayTap).toHaveBeenCalledWith('2026-04-20')
   })

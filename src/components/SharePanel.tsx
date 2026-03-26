@@ -44,8 +44,7 @@ export default function SharePanel({ sessionId }: Props) {
             </div>
           </div>
           <p className="text-xs text-blue-600 dark:text-blue-400 text-center">
-            Copy the link and share with friends or let them scan the QR code to
-            join the session!
+            Copy the link and share with friends or let them scan the QR code to join the session!
           </p>
         </div>
       )}

@@ -73,11 +73,7 @@ describe('computeFreeCountByDate', () => {
   })
 
   it('keeps separate counts for different dates', () => {
-    const availability = [
-      { date: '2026-04-01' },
-      { date: '2026-04-02' },
-      { date: '2026-04-01' },
-    ]
+    const availability = [{ date: '2026-04-01' }, { date: '2026-04-02' }, { date: '2026-04-01' }]
     const result = computeFreeCountByDate(availability)
     expect(result['2026-04-01']).toBe(2)
     expect(result['2026-04-02']).toBe(1)

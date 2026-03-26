@@ -15,7 +15,9 @@ export function useSession(sessionId: string | undefined): {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    if (!sessionId) { return }
+    if (!sessionId) {
+      return
+    }
 
     let cancelled = false
 
@@ -25,7 +27,9 @@ export function useSession(sessionId: string | undefined): {
           getSession(sessionId!),
           supabase.from('participants').select('*').eq('session_id', sessionId!),
         ])
-        if (pErr) { throw pErr }
+        if (pErr) {
+          throw pErr
+        }
         if (!cancelled) {
           setSession(sessionData)
           setParticipants((participantsData ?? []) as Participant[])
@@ -45,13 +49,24 @@ export function useSession(sessionId: string | undefined): {
       .channel(`session-participants-${sessionId}`)
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'participants', filter: `session_id=eq.${sessionId}` },
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'participants',
+          filter: `session_id=eq.${sessionId}`,
+        },
         (payload) => setParticipants((prev) => [...prev, payload.new as Participant])
       )
       .on(
         'postgres_changes',
-        { event: 'DELETE', schema: 'public', table: 'participants', filter: `session_id=eq.${sessionId}` },
-        (payload) => setParticipants((prev) => prev.filter((p) => p.id !== (payload.old as { id: string }).id))
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'participants',
+          filter: `session_id=eq.${sessionId}`,
+        },
+        (payload) =>
+          setParticipants((prev) => prev.filter((p) => p.id !== (payload.old as { id: string }).id))
       )
       .subscribe()
 

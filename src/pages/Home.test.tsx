@@ -15,7 +15,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
 vi.mock('../lib/session', () => ({ createSession: vi.fn() }))
 
 vi.mock('date-fns', async (importOriginal) => {
-  const actual = await importOriginal() as typeof import('date-fns')
+  const actual = (await importOriginal()) as typeof import('date-fns')
   return {
     ...actual,
     // Fix "today" to 2026-03-25 so default month is April 2026
@@ -114,7 +114,11 @@ describe('Home', () => {
 
   it('shows "Creating…" on the button while the request is pending', async () => {
     let resolve!: (value: string) => void
-    vi.mocked(createSession).mockReturnValue(new Promise((r) => { resolve = r }))
+    vi.mocked(createSession).mockReturnValue(
+      new Promise((r) => {
+        resolve = r
+      })
+    )
     const user = userEvent.setup()
     renderHome()
 
@@ -128,7 +132,11 @@ describe('Home', () => {
 
   it('button is disabled while creating', async () => {
     let resolve!: (value: string) => void
-    vi.mocked(createSession).mockReturnValue(new Promise((r) => { resolve = r }))
+    vi.mocked(createSession).mockReturnValue(
+      new Promise((r) => {
+        resolve = r
+      })
+    )
     const user = userEvent.setup()
     renderHome()
 
@@ -149,9 +157,7 @@ describe('Home', () => {
     await user.type(screen.getByPlaceholderText(/alex/i), 'Alice')
     await user.click(screen.getByRole('button', { name: /create session/i }))
 
-    await waitFor(() =>
-      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
-    )
+    await waitFor(() => expect(screen.getByText(/something went wrong/i)).toBeInTheDocument())
   })
 
   it('does not navigate on error', async () => {

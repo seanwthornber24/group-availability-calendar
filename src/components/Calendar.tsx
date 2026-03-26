@@ -14,7 +14,13 @@ interface Props {
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-export default function Calendar({ month, participants, availability, currentParticipantId, onDayTap }: Props) {
+export default function Calendar({
+  month,
+  participants,
+  availability,
+  currentParticipantId,
+  onDayTap,
+}: Props) {
   const days = useMemo(() => {
     const start = startOfMonth(new Date(month))
     const end = endOfMonth(start)
@@ -26,10 +32,7 @@ export default function Calendar({ month, participants, availability, currentPar
     [availability, currentParticipantId]
   )
 
-  const freeCountByDate = useMemo(
-    () => computeFreeCountByDate(availability),
-    [availability]
-  )
+  const freeCountByDate = useMemo(() => computeFreeCountByDate(availability), [availability])
 
   const maxFree = useMemo(() => computeMaxFree(freeCountByDate), [freeCountByDate])
 
@@ -45,7 +48,10 @@ export default function Calendar({ month, participants, availability, currentPar
       {/* Weekday headers */}
       <div className="grid grid-cols-7 mb-1">
         {WEEKDAYS.map((d) => (
-          <div key={d} className="text-center text-xs font-medium text-gray-400 dark:text-gray-500 py-1">
+          <div
+            key={d}
+            className="text-center text-xs font-medium text-gray-400 dark:text-gray-500 py-1"
+          >
             {d}
           </div>
         ))}

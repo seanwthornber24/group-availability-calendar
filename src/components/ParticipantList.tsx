@@ -6,7 +6,11 @@ interface Props {
   currentParticipantId: string | null
 }
 
-export default function ParticipantList({ participants, availability, currentParticipantId }: Props) {
+export default function ParticipantList({
+  participants,
+  availability,
+  currentParticipantId,
+}: Props) {
   const dayCountById: Record<string, number> = {}
   availability.forEach(({ participant_id }) => {
     dayCountById[participant_id] = (dayCountById[participant_id] ?? 0) + 1
@@ -14,8 +18,12 @@ export default function ParticipantList({ participants, availability, currentPar
 
   const sorted = [...participants].sort((a, b) => {
     // Current user first
-    if (a.id === currentParticipantId) { return -1 }
-    if (b.id === currentParticipantId) { return 1 }
+    if (a.id === currentParticipantId) {
+      return -1
+    }
+    if (b.id === currentParticipantId) {
+      return 1
+    }
     return (dayCountById[b.id] ?? 0) - (dayCountById[a.id] ?? 0)
   })
 
@@ -32,12 +40,16 @@ export default function ParticipantList({ participants, availability, currentPar
             <div
               key={p.id}
               className={`flex items-center gap-3 p-3 rounded-xl ${
-                isMe ? 'bg-blue-50 dark:bg-blue-950 border border-blue-100 dark:border-blue-900' : 'bg-gray-50 dark:bg-gray-800'
+                isMe
+                  ? 'bg-blue-50 dark:bg-blue-950 border border-blue-100 dark:border-blue-900'
+                  : 'bg-gray-50 dark:bg-gray-800'
               }`}
             >
               <span
                 className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold shrink-0 ${
-                  isMe ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                  isMe
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
                 }`}
               >
                 {p.name[0].toUpperCase()}
@@ -45,7 +57,9 @@ export default function ParticipantList({ participants, availability, currentPar
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                   {p.name}
-                  {isMe && <span className="ml-1 text-xs text-blue-500 dark:text-blue-400">(you)</span>}
+                  {isMe && (
+                    <span className="ml-1 text-xs text-blue-500 dark:text-blue-400">(you)</span>
+                  )}
                 </p>
                 <p className="text-xs text-gray-400 dark:text-gray-500">
                   {count === 0 ? 'No days marked' : `${count} day${count === 1 ? '' : 's'} free`}

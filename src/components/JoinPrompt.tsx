@@ -12,7 +12,9 @@ export default function JoinPrompt({ sessionName, onJoin, loading }: Props) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const trimmed = name.trim()
-    if (trimmed) { onJoin(trimmed) }
+    if (trimmed) {
+      onJoin(trimmed)
+    }
   }
 
   return (

@@ -8,7 +8,9 @@ export function useAvailability(sessionId: string | undefined): {
   const [availability, setAvailability] = useState<AvailabilityRow[]>([])
 
   useEffect(() => {
-    if (!sessionId) { return }
+    if (!sessionId) {
+      return
+    }
 
     let cancelled = false
 
@@ -17,7 +19,9 @@ export function useAvailability(sessionId: string | undefined): {
         .from('availability')
         .select('id, participant_id, date')
         .eq('session_id', sessionId!)
-      if (!cancelled && !error) { setAvailability((data ?? []) as AvailabilityRow[]) }
+      if (!cancelled && !error) {
+        setAvailability((data ?? []) as AvailabilityRow[])
+      }
     }
 
     load()
@@ -26,11 +30,20 @@ export function useAvailability(sessionId: string | undefined): {
       .channel(`session-availability-${sessionId}`)
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'availability', filter: `session_id=eq.${sessionId}` },
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'availability',
+          filter: `session_id=eq.${sessionId}`,
+        },
         (payload) =>
           setAvailability((prev) => [
             ...prev,
-            { id: (payload.new as AvailabilityRow).id, participant_id: (payload.new as AvailabilityRow).participant_id, date: (payload.new as AvailabilityRow).date },
+            {
+              id: (payload.new as AvailabilityRow).id,
+              participant_id: (payload.new as AvailabilityRow).participant_id,
+              date: (payload.new as AvailabilityRow).date,
+            },
           ])
       )
       .on(

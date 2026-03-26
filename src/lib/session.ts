@@ -5,7 +5,15 @@ import type { Session, Participant, StoredParticipant } from '../types'
 const LOCAL_ID_KEY = (sessionId: string) => `local_id:${sessionId}`
 const PARTICIPANT_KEY = (sessionId: string) => `participant_id:${sessionId}`
 
-export async function createSession({ name, creatorName, month }: { name: string; creatorName: string; month: string }): Promise<string> {
+export async function createSession({
+  name,
+  creatorName,
+  month,
+}: {
+  name: string
+  creatorName: string
+  month: string
+}): Promise<string> {
   const sessionId = nanoid(8)
   const localId = nanoid(16)
 
@@ -13,7 +21,9 @@ export async function createSession({ name, creatorName, month }: { name: string
     .from('sessions')
     .insert({ id: sessionId, name, month })
 
-  if (sessionError) { throw sessionError }
+  if (sessionError) {
+    throw sessionError
+  }
 
   const { data: participant, error: participantError } = await supabase
     .from('participants')
@@ -21,7 +31,9 @@ export async function createSession({ name, creatorName, month }: { name: string
     .select()
     .single()
 
-  if (participantError) { throw participantError }
+  if (participantError) {
+    throw participantError
+  }
 
   localStorage.setItem(LOCAL_ID_KEY(sessionId), localId)
   localStorage.setItem(PARTICIPANT_KEY(sessionId), participant!.id)
@@ -30,13 +42,11 @@ export async function createSession({ name, creatorName, month }: { name: string
 }
 
 export async function getSession(id: string): Promise<Session> {
-  const { data, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .eq('id', id)
-    .single()
+  const { data, error } = await supabase.from('sessions').select('*').eq('id', id).single()
 
-  if (error) { throw error }
+  if (error) {
+    throw error
+  }
   return data!
 }
 
@@ -48,7 +58,9 @@ export async function getSession(id: string): Promise<Session> {
 export function getStoredParticipant(sessionId: string): StoredParticipant | null {
   const localId = localStorage.getItem(LOCAL_ID_KEY(sessionId))
   const participantId = localStorage.getItem(PARTICIPANT_KEY(sessionId))
-  if (localId && participantId) { return { localId, participantId } }
+  if (localId && participantId) {
+    return { localId, participantId }
+  }
   return null
 }
 
@@ -61,7 +73,9 @@ export async function joinSession(sessionId: string, name: string): Promise<Part
     .select()
     .single()
 
-  if (error) { throw error }
+  if (error) {
+    throw error
+  }
 
   localStorage.setItem(LOCAL_ID_KEY(sessionId), localId)
   localStorage.setItem(PARTICIPANT_KEY(sessionId), participant!.id)

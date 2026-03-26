@@ -10,7 +10,14 @@ interface Props {
   onTap: (date: string) => void
 }
 
-export default function DayCell({ date, freeCount, totalParticipants, isMyDay, isBest, onTap }: Props) {
+export default function DayCell({
+  date,
+  freeCount,
+  totalParticipants,
+  isMyDay,
+  isBest,
+  onTap,
+}: Props) {
   // Compare date strings (yyyy-MM-dd) — timezone-safe: no parseISO needed
   const todayStr = format(startOfToday(), 'yyyy-MM-dd')
   const isPast = date < todayStr
@@ -39,9 +46,7 @@ export default function DayCell({ date, freeCount, totalParticipants, isMyDay, i
           {freeCount}/{totalParticipants}
         </span>
       )}
-      {isBest && !isPast && (
-        <span className="absolute -top-1 -right-1 text-[10px]">⭐</span>
-      )}
+      {isBest && !isPast && <span className="absolute -top-1 -right-1 text-[10px]">⭐</span>}
     </button>
   )
 }

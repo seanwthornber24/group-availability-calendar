@@ -130,11 +130,17 @@ describe('DayCell', () => {
 
   it('aria-label includes the date', () => {
     renderCell({ date: '2026-04-20' })
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', expect.stringContaining('2026-04-20'))
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'aria-label',
+      expect.stringContaining('2026-04-20')
+    )
   })
 
   it('aria-label includes free count when freeCount > 0', () => {
     renderCell({ date: '2026-04-20', freeCount: 2, totalParticipants: 4 })
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', expect.stringContaining('2 free'))
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'aria-label',
+      expect.stringContaining('2 free')
+    )
   })
 })

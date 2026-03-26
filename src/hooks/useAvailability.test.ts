@@ -103,9 +103,7 @@ describe('useAvailability', () => {
     })
 
     expect(result.current.availability).toHaveLength(1)
-    expect(
-      result.current.availability.find((a) => a.id === 'av1'),
-    ).toBeUndefined()
+    expect(result.current.availability.find((a) => a.id === 'av1')).toBeUndefined()
   })
 
   it('DELETE filter uses payload.old.id — does NOT use participant_id or date', async () => {
@@ -125,9 +123,7 @@ describe('useAvailability', () => {
     })
 
     expect(result.current.availability).toHaveLength(1)
-    expect(
-      result.current.availability.find((a) => a.id === 'av2'),
-    ).toBeUndefined()
+    expect(result.current.availability.find((a) => a.id === 'av2')).toBeUndefined()
   })
 
   it('subscribes to DELETE events without a session_id filter', async () => {
@@ -137,7 +133,7 @@ describe('useAvailability', () => {
     renderHook(() => useAvailability('ses1'))
 
     const deleteCall = mockChannel.on.mock.calls.find(
-      ([, opts]) => (opts as { event: string }).event === 'DELETE',
+      ([, opts]) => (opts as { event: string }).event === 'DELETE'
     )
     expect(deleteCall).toBeDefined()
     expect(deleteCall![1]).not.toHaveProperty('filter')
@@ -171,7 +167,9 @@ describe('useAvailability', () => {
 
   it('does not update state after unmount (cancelled flag)', async () => {
     let resolveQuery!: (value: unknown) => void
-    const deferred = new Promise<unknown>((res) => { resolveQuery = res })
+    const deferred = new Promise<unknown>((res) => {
+      resolveQuery = res
+    })
 
     const builder = createBuilder()
     builder.eq.mockReturnValue({
@@ -185,7 +183,9 @@ describe('useAvailability', () => {
     unmount() // sets cancelled = true before the query resolves
 
     // Resolve the slow query after unmount — cancelled flag should block state update
-    await act(async () => { resolveQuery({ data: SAMPLE_ROWS, error: null }) })
+    await act(async () => {
+      resolveQuery({ data: SAMPLE_ROWS, error: null })
+    })
 
     expect(result.current.availability).toEqual([])
   })

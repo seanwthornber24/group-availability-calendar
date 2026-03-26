@@ -58,8 +58,8 @@ describe('ParticipantList', () => {
 
   it('shows the correct day count for each participant', () => {
     renderList()
-    expect(screen.getByText('3 days free')).toBeInTheDocument()  // Alice: 3
-    expect(screen.getByText('1 day free')).toBeInTheDocument()   // Bob: 1
+    expect(screen.getByText('3 days free')).toBeInTheDocument() // Alice: 3
+    expect(screen.getByText('1 day free')).toBeInTheDocument() // Bob: 1
     expect(screen.getByText('No days marked')).toBeInTheDocument() // Carol: 0
   })
 

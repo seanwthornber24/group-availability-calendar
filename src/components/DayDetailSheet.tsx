@@ -10,8 +10,17 @@ interface Props {
   onClose: () => void
 }
 
-export default function DayDetailSheet({ date, participants, availability, currentParticipantId, onToggle, onClose }: Props) {
-  if (!date) { return null }
+export default function DayDetailSheet({
+  date,
+  participants,
+  availability,
+  currentParticipantId,
+  onToggle,
+  onClose,
+}: Props) {
+  if (!date) {
+    return null
+  }
 
   const freeParticipantIds = new Set(
     availability.filter((a) => a.date === date).map((a) => a.participant_id)
@@ -64,7 +73,9 @@ export default function DayDetailSheet({ date, participants, availability, curre
         <div className="px-5 pb-6">
           {freeParticipants.length > 0 && (
             <div className="mb-3">
-              <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Free</p>
+              <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
+                Free
+              </p>
               <div className="flex flex-col gap-1">
                 {freeParticipants.map((p) => (
                   <div key={p.id} className="flex items-center gap-2 py-1">
@@ -85,7 +96,9 @@ export default function DayDetailSheet({ date, participants, availability, curre
 
           {notFreeParticipants.length > 0 && (
             <div>
-              <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Not marked</p>
+              <p className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">
+                Not marked
+              </p>
               <div className="flex flex-col gap-1">
                 {notFreeParticipants.map((p) => (
                   <div key={p.id} className="flex items-center gap-2 py-1 opacity-40">

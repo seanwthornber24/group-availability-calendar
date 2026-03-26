@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react'
 export function useDarkMode(): { isDark: boolean; toggle: () => void } {
   function getInitial(): boolean {
     const stored = localStorage.getItem('theme')
-    if (stored) { return stored === 'dark' }
+    if (stored) {
+      return stored === 'dark'
+    }
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
@@ -16,7 +18,9 @@ export function useDarkMode(): { isDark: boolean; toggle: () => void } {
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     function handleChange(e: MediaQueryListEvent) {
-      if (!localStorage.getItem('theme')) { setIsDark(e.matches) }
+      if (!localStorage.getItem('theme')) {
+        setIsDark(e.matches)
+      }
     }
     mq.addEventListener('change', handleChange)
     return () => mq.removeEventListener('change', handleChange)

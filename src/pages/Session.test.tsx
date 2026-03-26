@@ -43,20 +43,36 @@ describe('Session', () => {
     })
     vi.mocked(useAvailability).mockReturnValue({ availability: [] })
     vi.mocked(getStoredParticipant).mockReturnValue({ participantId: 'p1', localId: 'local-abc' })
-    vi.mocked(joinSession).mockResolvedValue({ id: 'p3', name: 'Charlie', session_id: 'ses1', local_id: 'l3', created_at: null })
+    vi.mocked(joinSession).mockResolvedValue({
+      id: 'p3',
+      name: 'Charlie',
+      session_id: 'ses1',
+      local_id: 'l3',
+      created_at: null,
+    })
     vi.mocked(toggleAvailability).mockResolvedValue('added')
   })
 
   // ─── Loading state ───────────────────────────────────────────
   it('shows loading text when loading is true', () => {
-    vi.mocked(useSession).mockReturnValue({ session: null, participants: [], loading: true, error: null })
+    vi.mocked(useSession).mockReturnValue({
+      session: null,
+      participants: [],
+      loading: true,
+      error: null,
+    })
     renderSession()
     expect(screen.getByText(/loading session/i)).toBeInTheDocument()
   })
 
   // ─── Error / not found ───────────────────────────────────────
   it('shows "Session not found" when session is null and not loading', () => {
-    vi.mocked(useSession).mockReturnValue({ session: null, participants: [], loading: false, error: null })
+    vi.mocked(useSession).mockReturnValue({
+      session: null,
+      participants: [],
+      loading: false,
+      error: null,
+    })
     renderSession()
     expect(screen.getByText(/session not found/i)).toBeInTheDocument()
   })
@@ -73,7 +89,12 @@ describe('Session', () => {
   })
 
   it('shows a link to create a new session on the error screen', () => {
-    vi.mocked(useSession).mockReturnValue({ session: null, participants: [], loading: false, error: null })
+    vi.mocked(useSession).mockReturnValue({
+      session: null,
+      participants: [],
+      loading: false,
+      error: null,
+    })
     renderSession()
     expect(screen.getByRole('link', { name: /create a new session/i })).toBeInTheDocument()
   })
@@ -87,7 +108,9 @@ describe('Session', () => {
   it('shows singular "participant" when count is 1', () => {
     vi.mocked(useSession).mockReturnValue({
       session: SESSION,
-      participants: [{ id: 'p1', name: 'Alice', session_id: 'ses1', local_id: 'l1', created_at: null }],
+      participants: [
+        { id: 'p1', name: 'Alice', session_id: 'ses1', local_id: 'l1', created_at: null },
+      ],
       loading: false,
       error: null,
     })
@@ -132,8 +155,18 @@ describe('Session', () => {
 
   it('shows loading state on JoinPrompt while joinSession is pending', async () => {
     vi.mocked(getStoredParticipant).mockReturnValue(null)
-    let resolve!: (value: { id: string; name: string; session_id: string; local_id: string; created_at: null }) => void
-    vi.mocked(joinSession).mockReturnValue(new Promise((r) => { resolve = r }))
+    let resolve!: (value: {
+      id: string
+      name: string
+      session_id: string
+      local_id: string
+      created_at: null
+    }) => void
+    vi.mocked(joinSession).mockReturnValue(
+      new Promise((r) => {
+        resolve = r
+      })
+    )
     const user = userEvent.setup()
     renderSession()
 
@@ -152,9 +185,7 @@ describe('Session', () => {
     await user.type(screen.getByRole('textbox'), 'Charlie')
     await user.click(screen.getByRole('button', { name: /^join$/i }))
 
-    await waitFor(() =>
-      expect(screen.queryByText(/join session/i)).not.toBeInTheDocument()
-    )
+    await waitFor(() => expect(screen.queryByText(/join session/i)).not.toBeInTheDocument())
   })
 
   it('handles joinSession error gracefully (no crash, loading resets)', async () => {
@@ -167,9 +198,7 @@ describe('Session', () => {
     await user.click(screen.getByRole('button', { name: /^join$/i }))
 
     // Should not crash, loading should reset
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: /^join$/i })).not.toBeDisabled()
-    )
+    await waitFor(() => expect(screen.getByRole('button', { name: /^join$/i })).not.toBeDisabled())
   })
 
   // ─── Toggle availability ─────────────────────────────────────
